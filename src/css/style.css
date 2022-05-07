@@ -72,16 +72,31 @@ h1 {
   width: 379px;
 }
 
+.key-btn.capslock {
+  position: relative;
+}
+
 .key-btn.pressed {
-  background: rgba(0, 0, 0, 0.01);
+  background: #eeeded;
   color: #414141;
-  transform: scale(1.1);
+  position: relative;
+  top: 3px;
+  box-shadow: 0 0 0 1px #e0e0e0;
+  border-bottom-color: #d9d9d9;
   transition: 0.1s;
+}
+
+.capslock-status {
+  color: #616161;
+  font-size: 12px;
+  position: absolute;
+  top: -1px;
+  right: 5px;
 }
 
 .textarea {
   width: 890px;
-  height: 100px;
+  height: 140px;
   resize: none;
   border-radius: 10px;
   border: 1px solid #ddd;
