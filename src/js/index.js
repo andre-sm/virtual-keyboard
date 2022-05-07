@@ -103,6 +103,48 @@ const onActiveCapsLock = (capsLock, letters) => {
   });
 };
 
+const toggleLanguage = (letters) => {
+  const lang = settings.language === 'en' ? 'ru' : 'en';
+
+  letters.forEach((item) => {
+    const { code } = item.dataset;
+    const letter = item;
+    if (settings.caps) {
+      letter.textContent = keysObj[code][lang].shiftOff.toUpperCase();
+    } else {
+      letter.textContent = keysObj[code][lang].shiftOff;
+    }
+  });
+
+  if (localStorage.getItem('language')) {
+    localStorage.language = lang;
+  } else {
+    localStorage.setItem('language', lang);
+  }
+  settings.language = lang;
+};
+
+const changeLanguage = (ctrlBtn, altBtn, letters) => {
+  const btnCodes = [ctrlBtn.dataset.code, altBtn.dataset.code];
+  const pressedBtns = new Set();
+
+  document.addEventListener('keydown', (e) => {
+    pressedBtns.add(e.code);
+
+    for (let i = 0; i < btnCodes.length; i += 1) {
+      if (!pressedBtns.has(btnCodes[i])) {
+        return;
+      }
+    }
+    pressedBtns.clear();
+    toggleLanguage(letters);
+  });
+
+  document.addEventListener('keyup', (e) => {
+    pressedBtns.delete(e.code);
+  });
+};
+
 const createKeyboard = () => {
   const main = document.createElement('main');
   main.classList.add('main');
@@ -127,8 +169,11 @@ const createKeyboard = () => {
   const letters = document.querySelectorAll('[data-type="standart"]');
   const shiftBtns = document.querySelectorAll('[data-type="shift"]');
   const capsLockBtn = document.querySelector('[data-type="capsLock"]');
+  const ctrlLeftBtn = document.querySelector('[data-type="controlLeft"]');
+  const altLeftBtn = document.querySelector('[data-type="altLeft"]');
   onActiveShift(shiftBtns, letters);
   onActiveCapsLock(capsLockBtn, letters);
+  changeLanguage(ctrlLeftBtn, altLeftBtn, letters);
 };
 
 window.onload = () => {
