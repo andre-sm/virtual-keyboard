@@ -101,6 +101,28 @@ const onActiveCapsLock = (capsLock, letters) => {
   capsLock.addEventListener('mouseup', () => {
     capsLock.classList.remove('pressed');
   });
+
+  let isPressed = false;
+
+  document.addEventListener('keydown', (e) => {
+    e.preventDefault();
+    if (e.code === 'CapsLock') {
+      if (!isPressed) {
+        capsLock.classList.add('pressed');
+        capsLock.classList.toggle('active');
+        toggleCapsLock(letters);
+        isPressed = true;
+      }
+    }
+  });
+
+  document.addEventListener('keyup', (e) => {
+    e.preventDefault();
+    if (e.code === 'CapsLock') {
+      capsLock.classList.remove('pressed');
+      isPressed = false;
+    }
+  });
 };
 
 const toggleLanguage = (letters) => {
@@ -145,6 +167,24 @@ const changeLanguage = (ctrlBtn, altBtn, letters) => {
   });
 };
 
+const onBtnDown = (textareaElememt, elem) => {
+  const { type } = elem.dataset;
+  const textarea = textareaElememt;
+
+  let startSelection = textarea.selectionStart;
+  let endSelection = textarea.selectionEnd;
+  let valueLength = textarea.value.length;
+  const valueBefore = textarea.value.slice(0, startSelection);
+  const valueAfter = textarea.value.slice(endSelection);
+
+  if (type === 'standart') {
+    textarea.value = valueBefore + elem.textContent + valueAfter;
+    textarea.focus();
+    const position = startSelection + elem.textContent.length;
+    textarea.setSelectionRange(position, position);
+  }
+};
+
 const createKeyboard = () => {
   const main = document.createElement('main');
   main.classList.add('main');
@@ -174,6 +214,36 @@ const createKeyboard = () => {
   onActiveShift(shiftBtns, letters);
   onActiveCapsLock(capsLockBtn, letters);
   changeLanguage(ctrlLeftBtn, altLeftBtn, letters);
+
+  container.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.key-btn')) {
+      const pressedElem = e.target.closest('.key-btn');
+      pressedElem.classList.add('pressed');
+      onBtnDown(textarea, pressedElem);
+    }
+  });
+  container.addEventListener('mouseup', (e) => {
+    if (e.target.closest('.key-btn')) {
+      const pressedElem = e.target.closest('.key-btn');
+      pressedElem.classList.remove('pressed');
+      textarea.focus();
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    e.preventDefault();
+    const pressedBtn = document.querySelector(`[data-code="${e.code}"]`);
+    if (pressedBtn) {
+      pressedBtn.classList.add('pressed');
+      onBtnDown(textarea, pressedBtn);
+    }
+  });
+  document.addEventListener('keyup', (e) => {
+    e.preventDefault();
+    const pressedBtn = document.querySelector(`[data-code="${e.code}"]`);
+    if (pressedBtn) {
+      pressedBtn.classList.remove('pressed');
+    }
+  });
 };
 
 window.onload = () => {
