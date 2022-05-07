@@ -94,6 +94,11 @@ h1 {
   right: 5px;
 }
 
+.key-btn.active .capslock-status {
+  color: #5dff0e;
+  text-shadow: 0 0 10px #41c600;
+}
+
 .textarea {
   width: 890px;
   height: 140px;

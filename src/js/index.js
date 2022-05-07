@@ -80,6 +80,29 @@ const onActiveShift = (shifts, letters) => {
   });
 };
 
+const toggleCapsLock = (letters) => {
+  settings.caps = !settings.caps;
+  letters.forEach((item) => {
+    const letter = item;
+    if (settings.caps) {
+      letter.textContent = letter.textContent.toUpperCase();
+    } else {
+      letter.textContent = letter.textContent.toLowerCase();
+    }
+  });
+};
+
+const onActiveCapsLock = (capsLock, letters) => {
+  capsLock.addEventListener('mousedown', () => {
+    capsLock.classList.add('pressed');
+    capsLock.classList.toggle('active');
+    toggleCapsLock(letters);
+  });
+  capsLock.addEventListener('mouseup', () => {
+    capsLock.classList.remove('pressed');
+  });
+};
+
 const createKeyboard = () => {
   const main = document.createElement('main');
   main.classList.add('main');
@@ -101,9 +124,11 @@ const createKeyboard = () => {
   const keys = createKeys();
   keyboard.append(keys);
 
-  const shiftBtns = document.querySelectorAll('[data-type="shift"]');
   const letters = document.querySelectorAll('[data-type="standart"]');
+  const shiftBtns = document.querySelectorAll('[data-type="shift"]');
+  const capsLockBtn = document.querySelector('[data-type="capsLock"]');
   onActiveShift(shiftBtns, letters);
+  onActiveCapsLock(capsLockBtn, letters);
 };
 
 window.onload = () => {
