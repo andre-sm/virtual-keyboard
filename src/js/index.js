@@ -7,6 +7,12 @@ const settings = {
   caps: false,
 };
 
+const getLocalStorageData = () => {
+  if (localStorage.getItem('language')) {
+    settings.language = localStorage.getItem('language');
+  }
+};
+
 const createKeys = () => {
   const fragment = document.createDocumentFragment();
 
@@ -324,5 +330,6 @@ const createKeyboard = () => {
 };
 
 window.onload = () => {
+  getLocalStorageData();
   createKeyboard();
 };
