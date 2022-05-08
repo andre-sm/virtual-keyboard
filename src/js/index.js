@@ -77,6 +77,21 @@ const onActiveShift = (shifts, letters) => {
       shift.classList.remove('pressed');
       toLowerCase(letters);
     });
+
+    document.addEventListener('keydown', (e) => {
+      e.preventDefault();
+      if (e.code === shift.dataset.code) {
+        shift.classList.add('pressed');
+        toUpperCase(letters);
+      }
+    });
+    document.addEventListener('keyup', (e) => {
+      e.preventDefault();
+      if (e.code === shift.dataset.code) {
+        shift.classList.remove('pressed');
+        toLowerCase(letters);
+      }
+    });
   });
 };
 
@@ -103,7 +118,6 @@ const onActiveCapsLock = (capsLock, letters) => {
   });
 
   let isPressed = false;
-
   document.addEventListener('keydown', (e) => {
     e.preventDefault();
     if (e.code === 'CapsLock') {
@@ -171,13 +185,76 @@ const onBtnDown = (textareaElememt, elem) => {
   const { type } = elem.dataset;
   const textarea = textareaElememt;
 
-  let startSelection = textarea.selectionStart;
-  let endSelection = textarea.selectionEnd;
-  let valueLength = textarea.value.length;
+  const startSelection = textarea.selectionStart;
+  const endSelection = textarea.selectionEnd;
+  const valueLength = textarea.value.length;
   const valueBefore = textarea.value.slice(0, startSelection);
   const valueAfter = textarea.value.slice(endSelection);
 
   if (type === 'standart') {
+    textarea.value = valueBefore + elem.textContent + valueAfter;
+    textarea.focus();
+    const position = startSelection + elem.textContent.length;
+    textarea.setSelectionRange(position, position);
+  }
+
+  if (type === 'backspace') {
+    if (startSelection !== endSelection) {
+      textarea.value = textarea.value.slice(0, startSelection) + valueAfter;
+      textarea.focus();
+      const position = startSelection;
+      textarea.setSelectionRange(position, position);
+    } else if (startSelection === 0) {
+      return;
+    } else {
+      textarea.value = textarea.value.slice(0, startSelection - 1) + valueAfter;
+      textarea.focus();
+      const position = startSelection - 1;
+      textarea.setSelectionRange(position, position);
+    }
+  }
+
+  if (type === 'tab') {
+    const insertText = '    ';
+    textarea.value = valueBefore + insertText + valueAfter;
+    textarea.focus();
+    const position = startSelection + insertText.length;
+    textarea.setSelectionRange(position, position);
+  }
+
+  if (type === 'delete') {
+    if (startSelection === valueLength) {
+      return;
+    }
+    if (startSelection !== endSelection) {
+      textarea.value = textarea.value.slice(0, startSelection) + valueAfter;
+      textarea.focus();
+      const position = startSelection;
+      textarea.setSelectionRange(position, position);
+    } else {
+      textarea.value = valueBefore + textarea.value.slice(endSelection + 1);
+      textarea.focus();
+      const position = startSelection;
+      textarea.setSelectionRange(position, position);
+    }
+  }
+
+  if (type === 'enter') {
+    const insertText = '\n';
+    textarea.value = valueBefore + insertText + valueAfter;
+    textarea.focus();
+    const position = startSelection + insertText.length;
+    textarea.setSelectionRange(position, position);
+  }
+
+  if (type === 'space') {
+    textarea.value = `${valueBefore} ${valueAfter}`;
+    textarea.focus();
+    const position = startSelection + 1;
+    textarea.setSelectionRange(position, position);
+  }
+
+  if (type === 'arrows') {
     textarea.value = valueBefore + elem.textContent + valueAfter;
     textarea.focus();
     const position = startSelection + elem.textContent.length;

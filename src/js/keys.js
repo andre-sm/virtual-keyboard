@@ -265,8 +265,10 @@ const keysObj = {
     type: 'standart',
   },
   ArrowUp: {
+    en: { shiftOff: '↑', shiftOn: '↑' },
+    ru: { shiftOff: '↑', shiftOn: '↑' },
+    type: 'arrows',
     text: '↑',
-    type: 'arrowUp',
   },
   ShiftRight: {
     text: 'Shift',
@@ -292,19 +294,25 @@ const keysObj = {
   },
   AltRight: {
     text: 'Alt',
-    type: 'functional',
+    type: 'altRight',
   },
   ArrowLeft: {
+    en: { shiftOff: '←', shiftOn: '←' },
+    ru: { shiftOff: '←', shiftOn: '←' },
+    type: 'standart',
     text: '←',
-    type: 'arrowLeft',
   },
   ArrowDown: {
+    en: { shiftOff: '↓', shiftOn: '↓' },
+    ru: { shiftOff: '↓', shiftOn: '↓' },
+    type: 'arrows',
     text: '↓',
-    type: 'arrowDown',
   },
   ArrowRight: {
+    en: { shiftOff: '→', shiftOn: '→' },
+    ru: { shiftOff: '→', shiftOn: '→' },
+    type: 'arrows',
     text: '→',
-    type: 'arrowRight',
   },
   ControlRight: {
     text: 'Ctrl',
