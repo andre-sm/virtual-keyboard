@@ -40,7 +40,7 @@ h1 {
   align-items: center;
   flex-wrap: wrap;
   gap: 7px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 8px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 6px;
 }
 
 .key-btn {
@@ -56,6 +56,8 @@ h1 {
   color: #4f4f4f;
   cursor: pointer;
   user-select: none;
+  position: relative;
+  top: 0;
 }
 .key-btn.small-btn {
   width: 40px;
@@ -80,11 +82,10 @@ h1 {
 .key-btn.pressed {
   background: #eeeded;
   color: #414141;
-  position: relative;
   top: 3px;
   box-shadow: 0 0 0 1px #e0e0e0;
   border-bottom-color: #d9d9d9;
-  transition: 0.1s;
+  transition: all 0.25s;
 }
 
 .capslock-status {
@@ -112,7 +113,6 @@ h1 {
 }
 .textarea:focus {
   outline: none;
-  border: 1px solid #c4c4c4;
 }
 
 /*# sourceMappingURL=style.css.map */

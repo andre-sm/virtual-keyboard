@@ -9,9 +9,5 @@
     color: rgba(0, 0, 0, 0.7);
     &:focus {
       outline: none;
-      border: 1px solid darken(#ddd, 10%);
-    }
-    &[placeholder] { 
-
     }
   }
