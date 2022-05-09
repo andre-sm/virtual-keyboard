@@ -60,6 +60,13 @@ class Keyboard {
         textarea.focus();
       }
     });
+    container.addEventListener('mouseout', (e) => {
+      if (e.target.closest('.key-btn')) {
+        const pressedElem = e.target.closest('.key-btn');
+        pressedElem.classList.remove('pressed');
+        textarea.focus();
+      }
+    });
     document.addEventListener('keydown', (e) => {
       e.preventDefault();
       const pressedBtn = document.querySelector(`[data-code="${e.code}"]`);
@@ -325,11 +332,99 @@ class Keyboard {
       textarea.setSelectionRange(position, position);
     }
 
-    if (type === 'arrows') {
-      textarea.value = valueBefore + this.pressedElement.textContent + valueAfter;
+    if (type === 'arrowLeft') {
+      if (startSelection === 0) {
+        return;
+      }
       textarea.focus();
-      const position = startSelection + this.pressedElement.textContent.length;
+      const position = startSelection - 1;
       textarea.setSelectionRange(position, position);
+    }
+
+    if (type === 'arrowRight') {
+      textarea.focus();
+      const position = startSelection + 1;
+      textarea.setSelectionRange(position, position);
+    }
+
+    if (type === 'arrowUp') {
+      if (textarea.value === '') return;
+      const enterSplit = textarea.value.replace(/\n/g, '\n ').split('\n');
+      const valueArray = enterSplit.map((item) => item.match(/.{1,92}|\n/g)).flat();
+
+      const idxObj = {};
+      let count = 0;
+
+      for (let i = 0; i < valueArray.length; i += 1) {
+        const rangeArray = [];
+        for (let j = 0; j < valueArray[i].length; j += 1) {
+          rangeArray.push(count);
+          count += 1;
+
+          if (i === 0 && j === valueArray[i].length - 1) {
+            rangeArray.push(count);
+            count += 1;
+          }
+        }
+        idxObj[i] = rangeArray;
+      }
+      const current = {};
+      Object.values(idxObj).forEach((item, index) => {
+        if (item.includes(startSelection)) {
+          current.row = index;
+          current.leftIndex = item.indexOf(startSelection);
+        }
+      });
+
+      if (valueArray[current.row - 1]) {
+        textarea.focus();
+
+        let newPosition = idxObj[current.row - 1][current.leftIndex];
+        if (!newPosition && newPosition !== 0) {
+          newPosition = idxObj[current.row - 1][idxObj[current.row - 1].length - 1];
+        }
+        textarea.setSelectionRange(newPosition, newPosition);
+      }
+    }
+
+    if (type === 'arrowDown') {
+      if (textarea.value === '') return;
+      const enterSplit = textarea.value.replace(/\n/g, '\n ').split('\n');
+      const valueArray = enterSplit.map((item) => item.match(/.{1,92}|\n/g)).flat();
+
+      const idxObj = {};
+      let count = 0;
+
+      for (let i = 0; i < valueArray.length; i += 1) {
+        const rangeArray = [];
+        for (let j = 0; j < valueArray[i].length; j += 1) {
+          rangeArray.push(count);
+          count += 1;
+
+          if (i === 0 && j === valueArray[i].length - 1) {
+            rangeArray.push(count);
+            count += 1;
+          }
+        }
+        idxObj[i] = rangeArray;
+      }
+      const current = {};
+      Object.values(idxObj).forEach((item, index) => {
+        if (item.includes(startSelection)) {
+          current.row = index;
+          current.leftIndex = item.indexOf(startSelection);
+        }
+      });
+
+      if (valueArray[current.row + 1]) {
+        textarea.focus();
+
+        let newPosition = idxObj[current.row + 1][current.leftIndex];
+        if (!newPosition) {
+          newPosition = idxObj[current.row + 1][idxObj[current.row + 1].length - 1];
+        }
+        textarea.setSelectionRange(newPosition, newPosition);
+      }
     }
   }
 }
