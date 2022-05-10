@@ -134,7 +134,7 @@ const keysObj = {
     ru: { shiftOff: 'ъ', shiftOn: 'Ъ' },
     type: 'standart',
   },
-  IntlBackslash: {
+  Backslash: {
     en: { shiftOff: '\\', shiftOn: '|' },
     ru: { shiftOff: '\\', shiftOn: '/' },
     type: 'standart',
